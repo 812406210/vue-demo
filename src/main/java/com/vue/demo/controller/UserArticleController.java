@@ -7,9 +7,6 @@ import com.vue.demo.service.UserArticleService;
 import com.vue.demo.utils.ResponseResult;
 import com.vue.demo.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,14 +21,14 @@ public class UserArticleController {
     @Autowired
     private UserArticleService userArticleService;
 
-    @RequestMapping("/getArticleByTitle")
+    @RequestMapping(value = "/getArticleByTitle",method = RequestMethod.GET)
     @CrossOrigin
     public Result getArticleByTitle(String title) {
         UserArticle userArticle = userArticleService.getArticleByTitle(title);
         return ResponseResult.success(userArticle);
     }
 
-    @RequestMapping("/insertArticle")
+    @RequestMapping(value = "/insertArticle",method = RequestMethod.POST)
     @CrossOrigin
     public Result insertArticle(@RequestBody UserArticle userArticle) {
         UserArticle article = userArticleService.insertArticle(userArticle);

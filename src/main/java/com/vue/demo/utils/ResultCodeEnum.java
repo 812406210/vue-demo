@@ -9,8 +9,9 @@ public enum ResultCodeEnum {
     UNKNOWN_ERROR(false,401,"未知参数"),
     PARAM_ERROR(false,402,"参数错误"),
     UPLOAD_FILE_ERROR(false,10000,"上传文件失败！"),
-    USERNAME_PASSWORD_ERROR(false,10001,"用户名密码错误");
-    ;
+    USERNAME_PASSWORD_ERROR(false,10001,"用户名密码错误"),
+    OCR_ERROR(false,10002,"tesseract解析错误！"),
+    OCR_LANGUAGE_ERROR(false,10003,"语言参数错误");
 
     private Boolean success;
     private Integer code;

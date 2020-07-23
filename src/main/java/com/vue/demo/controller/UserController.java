@@ -38,7 +38,7 @@ public class UserController {
         if(userOne == null){
             return ResponseResult.error(ResultCodeEnum.USERNAME_PASSWORD_ERROR.getCode(),ResultCodeEnum.USERNAME_PASSWORD_ERROR.getMessage());
         }
-        return ResponseResult.success();
+        return ResponseResult.success(userOne);
     }
 
 }

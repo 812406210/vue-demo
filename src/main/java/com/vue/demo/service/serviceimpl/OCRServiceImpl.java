@@ -23,24 +23,35 @@ import java.io.IOException;
 public class OCRServiceImpl implements OCRService {
     private  static  final Logger ocrServiceImplLog = LoggerFactory.getLogger(OCRServiceImpl.class);
     String language = "";
+
+    /**
+     * 方法一
+     * @param file
+     * @return
+     */
     @Override
     public String getCharacterFromPic(MultipartFile file) {
+        String modelPath = "D:\\software\\ocr-tesseract\\tessdata";
+        //String modelPath = "/root/project/java/tesseract_model";
+
         Tesseract tessreact = new Tesseract();
         //需要指定训练集 训练集到 https://github.com/tesseract-ocr/tessdata 下载。
-        tessreact.setDatapath("D:\\software\\ocr-tesseract\\tessdata");
+        tessreact.setDatapath(modelPath);
+
         if(language.equals("ch")) {
             //注意  默认是英文识别，如果做中文识别，需要单独设置。
             tessreact.setLanguage("chi_sim");
         }
+        tessreact.setLanguage("chi_sim");
         try {
             File imageFile = new File(file.getOriginalFilename());
             FileUtils.copyInputStreamToFile(file.getInputStream(), imageFile);
             String result = tessreact.doOCR(imageFile);
             ocrServiceImplLog.info(result);
-            System.out.println("----------------");
-            String handleResult  =  this.ocr(imageFile);
-            ocrServiceImplLog.info(handleResult);
-            return result+"----------------------------------\n\r"+handleResult;
+//            System.out.println("----------------");
+//            String handleResult  =  this.ocr(imageFile,modelPath);
+//            ocrServiceImplLog.info(handleResult);
+            return result;
         } catch (TesseractException e) {
             System.err.println(e.getMessage());
         } catch (IOException e) {
@@ -58,8 +69,13 @@ public class OCRServiceImpl implements OCRService {
         return "success";
     }
 
-
-    private  String ocr(File file) {
+    /**
+     * 方法二
+     * @param file
+     * @param modelPath
+     * @return
+     */
+    private  String ocr(File file,String modelPath) {
         String result = null;
         try {
             double start = System.currentTimeMillis();
@@ -72,11 +88,15 @@ public class OCRServiceImpl implements OCRService {
             textImage = ImageHelper.getScaledInstance(textImage, textImage.getWidth() * 1, textImage.getHeight() * 1);
 
             textImage = ImageHelper.convertImageToBinary(textImage);
-            ImageIO.write(textImage, "png", new File("D:\\software\\ocr-tesseract\\img_tem\\img_temp.jpg"));
+            //String saveImgPath = "/root/project/java/tesseract_model/temp_img";
+            String saveImgPath = "D:\\software\\ocr-tesseract\\img_tem\\temp.img";
+            ImageIO.write(textImage, "png", new File(saveImgPath));
 
             Tesseract instance = new Tesseract();
             //设置训练库的位置
-            String modelPath = "D:\\software\\ocr-tesseract\\tessdata";
+//            String modelPath = "/root/project/java/tesseract_model";
+
+
             instance.setDatapath(modelPath);
             //中文识别
             instance.setLanguage("chi_sim");
